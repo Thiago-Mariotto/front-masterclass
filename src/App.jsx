@@ -1,22 +1,52 @@
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import './App.css';
 
 function App() {
+
+  const [users, setUsers] = useState([]);
+  const [name, setName] = useState('');
+  const [age, setAge] = useState('');
+
+  useEffect(() => {
+    axios.get('https://backend-prod-trybe.up.railway.app/users')
+      .then(res => {
+        setUsers(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  });
+
+  const handleSubmit = (e) => {
+    console.log('submit', name, age);
+    e.preventDefault();
+    axios.post('https://backend-prod-trybe.up.railway.app/users', { name, age })
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <p>Choo Choo! This is an example of a Vite + React app running on Railway.</p>
-      </div>
+      <h1>Cadastrar-se</h1>
+      <form>
+        <label>Name</label>
+        <input type="text" name="name" value={name} onChange={e => setName(e.target.value)} />
+        <label>Age</label>
+        <input type="number" name="age" value={age} onChange={e => setAge(e.target.value)} />
+        <button type="submit" onClick={handleSubmit}>Add</button>
+      </form>
+
+      <h1>Pessoas cadastradas</h1>
+      <ul>
+        {users.map(user => (
+          <li key={user.id}>{user.name} - {user.age}</li>
+        ))}
+      </ul>
     </>
   )
 }
