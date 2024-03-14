@@ -9,7 +9,7 @@ function App() {
   const [age, setAge] = useState('');
 
   useEffect(() => {
-    axios.get('https://backend-prod-trybe.up.railway.app/users')
+    axios.get('https://trybe-api.up.railway.app/users')
       .then(res => {
         setUsers(res.data);
       })
@@ -21,13 +21,25 @@ function App() {
   const handleSubmit = (e) => {
     console.log('submit', name, age);
     e.preventDefault();
-    axios.post('https://backend-prod-trybe.up.railway.app/users', { name, age })
+
+    axios.post('https://trybe-api.up.railway.app/users',
+      { name, age },
+      { headers: { Authorization: 'dsioajdsiods' } })
       .then(res => {
         console.log(res);
       })
       .catch(err => {
         console.log(err);
       });
+
+    // fetch('https://backend-prod-trybe.up.railway.app/users', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'Authorization': 'sadkposad'
+    //   },
+    //   body: JSON.stringify({ name, age })
+    // })
   };
 
   return (
